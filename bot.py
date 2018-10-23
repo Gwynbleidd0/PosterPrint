@@ -1,0 +1,118 @@
+import vk_api
+import calc_def
+from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
+
+
+def main():
+    """ Пример использования longpoll
+        https://vk.com/dev/using_longpoll
+        https://vk.com/dev/using_longpoll_2
+    """
+    
+#    vk_session = vk_api.VkApi(token = 'aeb7a7e62e220a95cf2c76702cf1b9c50735ab93b688a95a203c98c678e3d60d48ec521967c551a9c7b40')
+#    vk_session = vk_api.VkApi(token = '973e44f4661ce7e6f56115203bdf7cffe2904eb0e6e29936ded6ee3a5055545e1e3dc2c4f834d19c7a881') 
+    vk_session = vk_api.VkApi(token = 'aeb7a7e62e220a95cf2c76702cf1b9c50735ab93b688a95a203c98c678e3d60d48ec521967c551a9c7b40')
+    vk = vk_session.get_api()
+    user_id_d={}
+    user_id_t={}
+    user_id_t2={}
+    user_id_t3={}
+    user_id_t4={}
+    user_id_rezka={}
+    user_id_countlist={}
+    user_id_color={}
+    user_id_plotnost={}
+    keyboard1 = VkKeyboard()
+    keyboard1.add_button('Посчитать заказ', color=VkKeyboardColor.DEFAULT)
+    keyboard1.add_line()  # Переход на вторую строку
+    keyboard1.add_button('Информация', color=VkKeyboardColor.NEGATIVE)
+    keyboard2 = VkKeyboard(one_time=True)
+    keyboard2.add_button('A4(2 части)', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_button('А5(4 части)', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_button('99*210(6 частей)', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_button('А6(8 частей)', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_line()  # Переход на вторую строку
+    keyboard2.add_button('10 частей', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_button('А7(16 частей)', color=VkKeyboardColor.DEFAULT)
+    keyboard2.add_button('визитка5*9(30 частей)', color=VkKeyboardColor.DEFAULT)
+    keyboard3 = VkKeyboard(one_time=True)
+    keyboard3.add_button('Цветная+Пустая', color=VkKeyboardColor.DEFAULT)
+    keyboard3.add_button('Цветная+Цветная', color=VkKeyboardColor.DEFAULT)
+    keyboard3.add_line()
+    keyboard3.add_button('Черно-белая+Пустая', color=VkKeyboardColor.DEFAULT)
+    keyboard3.add_button('Черно-белая+Черно-белая', color=VkKeyboardColor.DEFAULT)
+    keyboard3.add_button('Цветная+Черно-белая', color=VkKeyboardColor.DEFAULT)
+    keyboard4 = VkKeyboard(one_time=True)
+    keyboard4.add_button('130гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('150гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('170гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('200гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_line()  # Переход на вторую строку
+    keyboard4.add_button('250гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('300гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('350гр/м', color=VkKeyboardColor.DEFAULT)
+    keyboard4.add_button('самоклейка', color=VkKeyboardColor.DEFAULT)
+    longpoll = VkLongPoll(vk_session)
+    global t1
+    for event in longpoll.listen():
+
+        if event.type == VkEventType.MESSAGE_NEW:
+            print('Новое сообщение:')
+            print('Текст: ', event.text)
+            if event.text=='Начать':
+                vk.messages.send(user_id=event.user_id,message='Тест 1.',keyboard=keyboard1.get_keyboard())
+                user_id_d[event.user_id]=0
+                user_id_t[event.user_id] = False
+                user_id_t2[event.user_id]=False
+                user_id_t3[event.user_id]=False
+                user_id_t4[event.user_id]=False
+                user_id_rezka[event.user_id]=0
+                user_id_countlist[event.user_id]=0
+                user_id_color[event.user_id]=0
+                user_id_plotnost[event.user_id]=0
+            if event.text=='Информация':
+                vk.messages.send(user_id=event.user_id,message='Тест 1.',keyboard=keyboard1.get_keyboard())
+            if event.text=='Посчитать заказ':
+                vk.messages.send(user_id=event.user_id,message='Выберите формат.',keyboard=keyboard2.get_keyboard())  
+                print(event.message_id )
+                user_id_t[event.user_id] = True
+                user_id_d[event.user_id] = event.message_id     
+            if (event.to_me and event.message_id>user_id_d.get(event.user_id,0))and user_id_t.get(event.user_id,False):
+                vk.messages.send(user_id=event.user_id,message='Отлично. Теперь введите кол-во листов')
+                user_id_d[event.user_id] = event.message_id
+                user_id_rezka[event.user_id]=event.text
+                user_id_t[event.user_id]=False
+                user_id_t2[event.user_id]=True
+            if (event.to_me and event.message_id>user_id_d.get(event.user_id,0))and user_id_t2.get(event.user_id,False):
+                vk.messages.send(user_id=event.user_id,message='Хорошо. Теперь выберите конфигурацию цвета',keyboard=keyboard3.get_keyboard())
+                user_id_countlist[event.user_id] = int(event.text)
+                user_id_d[event.user_id] = event.message_id
+                user_id_t2[event.user_id]=False
+                user_id_t3[event.user_id]=True
+            if (event.to_me and event.message_id>user_id_d.get(event.user_id,0))and user_id_t3.get(event.user_id,False):
+                vk.messages.send(user_id=event.user_id,message='Хорошо. Теперь выберите плотность бумаги',keyboard=keyboard4.get_keyboard())
+                user_id_color[event.user_id] = event.text
+                user_id_d[event.user_id] = event.message_id
+                user_id_t3[event.user_id]=False
+                user_id_t4[event.user_id]=True
+            if (event.to_me and event.message_id>user_id_d.get(event.user_id,0))and user_id_t4.get(event.user_id,False):
+                rezka_answer=user_id_rezka[event.user_id]
+                count_lists=user_id_countlist[event.user_id]
+                color_per=user_id_color[event.user_id]
+                paper_plot=event.text
+                try:
+                    price=calc_def.calc_price(rezka_answer,count_lists,color_per,paper_plot)
+                    vk.messages.send(user_id=event.user_id,message='Отлично. Итоговая цена:'+price,keyboard=keyboard1.get_keyboard())
+                except TypeError:
+                    vk.messages.send(user_id=event.user_id,message='Даны неподдерживаемые ответы. Пожалуйста воспользуйтесь vk-клавиатурой',keyboard=keyboard1.get_keyboard())
+                user_id_countlist[event.user_id] = event.text
+                user_id_d[event.user_id] = event.message_id
+                user_id_t4[event.user_id]=False
+            print()
+
+
+
+
+if __name__ == '__main__':
+    main()
