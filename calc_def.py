@@ -1,8 +1,9 @@
 import math
-def calc_price(rezka_answer,count_lists,color_per,paper_plot):
-    color=[[35,32,30,29,28,24],[50,48,46,45,43,40],[20,18,15,14,12,11],[40,35,30,28,22,20],[45,40,38,37,33,30]]
-    paper=[2,3,4,5,6,7,8,25]
-    rezka=[0,40,60,80,100,120,200]
+color=[[35,32,30,29,28,24],[50,48,46,45,43,40],[20,18,15,14,12,11],[40,35,30,28,22,20],[45,40,38,37,33,30]]
+paper=[2,3,4,5,6,7,8,25]
+rezka=[0,40,60,80,100,120,200]
+def calc_price(rezka_answer,count_lists,color_per,paper_plot,rezka,color,paper):
+
     price=0
     if rezka_answer=='A4(2 части)':
         count_lists=count_lists/2
@@ -78,5 +79,5 @@ def calc_price(rezka_answer,count_lists,color_per,paper_plot):
     price=price+color[color_per-1][t]*count_lists
     price=price+paper[paper_plot-1]*count_lists
     price=price+rezka[rezka_answer-1]
-    return(str(price)+' руб')
+    return(str(price))
     
