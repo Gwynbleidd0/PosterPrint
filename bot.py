@@ -143,7 +143,7 @@ def main():
                 user_id_d[event.user_id] = event.message_id
                 user_id_zakaz[event.user_id]=[]
             if event.text=='Добавить к заказу':
-                if len(user_id_zakaz[event.user_id])<10:
+                if len(user_id_zakaz.get(event.user_id,0))<10:
                     vk.messages.send(user_id=event.user_id,message='Выберите формат.',keyboard=keyboard2.get_keyboard())  
                     print(event.message_id )
                     user_id_t[event.user_id] = True
