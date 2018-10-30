@@ -82,6 +82,27 @@ def main():
                 user_id_zakaz[event.user_id]=[]
             if event.text=='Информация':
                 vk.messages.send(user_id=event.user_id,message='Тест 1.',keyboard=keyboard1.get_keyboard())
+            if event.text.split()[0]=='!Change_price' and (event.user_id==86658739 or event.user_id==75772038):
+                if event.text.split()[1]=='color':
+                    try:
+                        calc_def.color[int(event.text.split()[2])][int(event.text.split()[3])]=int(event.text.split()[4])
+                        vk.messages.send(user_id=event.user_id,message='Готово!',keyboard=keyboard1.get_keyboard())   
+                    except TypeError:
+                        vk.messages.send(user_id=event.user_id,message='Неверная команда',keyboard=keyboard1.get_keyboard())
+                if event.text.split()[1]=='paper':
+                    try:
+                        calc_def.paper[int(event.text.split()[2])]=int(event.text.split()[3])
+                        vk.messages.send(user_id=event.user_id,message='Готово!',keyboard=keyboard1.get_keyboard())          
+                    except TypeError:
+                        vk.messages.send(user_id=event.user_id,message='Неверная команда',keyboard=keyboard1.get_keyboard())
+                if event.text.split()[1]=='rezka':
+                    try:
+                        print(event.text.split()[2])
+                        print(event.text.split()[3])
+                        calc_def.rezka[int(event.text.split()[2])]=int(event.text.split()[3])       
+                        vk.messages.send(user_id=event.user_id,message='Готово!',keyboard=keyboard1.get_keyboard())    
+                    except TypeError:
+                        vk.messages.send(user_id=event.user_id,message='Неверная команда',keyboard=keyboard1.get_keyboard())      
             if event.text=='Удалить позицию':
                 vk.messages.send(user_id=event.user_id,message='Введите номер пункта')
                 user_id_d[event.user_id] = event.message_id
